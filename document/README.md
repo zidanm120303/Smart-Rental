@@ -41,11 +41,3 @@ php artisan migrate:fresh --seed
 
 Pastikan `.env`:
 
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=smart_rental_pro
-DB_USERNAME=smart_rental_pro
-DB_PASSWORD=sm@rt@dm1n
-```
