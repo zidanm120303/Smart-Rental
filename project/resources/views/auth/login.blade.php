@@ -1,40 +1,59 @@
 <x-guest-layout>
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <div style="margin-bottom: 2rem; text-align: center;">
+        <h2 style="font-size: 2rem; font-weight: 800; color: #0f172a; margin: 0 0 0.5rem 0; letter-spacing: -0.02em;">Selamat Datang</h2>
+        <p style="color: #64748b; font-size: 0.875rem; margin: 0; line-height: 1.5;">Silakan masuk kredensial akun Anda untuk melanjutkan ke dasbor.</p>
+    </div>
 
-    <form method="POST" action="{{ route('login') }}" class="space-y-4">
+    <x-auth-session-status class="mb-3" :status="session('status')" />
+
+    <form method="POST" action="{{ route('login') }}" style="display: flex; flex-direction: column; gap: 1.25rem;">
         @csrf
 
         <div>
-            <x-input-label for="email" value="Email" />
-            <x-text-input id="email" class="mt-2 block w-full" type="email" name="email" :value="old('email')" placeholder="Masukkan email akun" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <label for="email" style="display: block; font-size: 0.85rem; font-weight: 600; color: #334155; margin-bottom: 0.4rem;">Email Perusahaan</label>
+            <input id="email" type="email" name="email" value="{{ old('email') }}" placeholder="nama@perusahaan.com" required autofocus autocomplete="username"
+                style="width: 100%; box-sizing: border-box; padding: 0.85rem 1rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; font-size: 0.9rem; color: #0f172a; background-color: #ffffff; outline: none; transition: all 0.2s;"
+                onfocus="this.style.borderColor='#2563eb'; this.style.boxShadow='0 0 0 4px rgba(37, 99, 235, 0.1)';"
+                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none';" />
+            <x-input-error :messages="$errors->get('email')" class="mt-1" />
         </div>
 
         <div>
-            <x-input-label for="password" value="Kata Sandi" />
-            <x-text-input id="password" class="mt-2 block w-full" type="password" name="password" placeholder="Masukkan kata sandi" required autocomplete="current-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-between">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-slate-300 text-blue-600 shadow-sm focus:ring-blue-500" name="remember">
-                <span class="ms-2 text-sm text-slate-600">Ingat saya</span>
-            </label>
-
-            @if (Route::has('password.request'))
-                <a class="text-sm font-semibold text-blue-700 hover:text-blue-800" href="{{ route('password.request') }}">
-                    Lupa kata sandi?
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                <label for="password" style="font-size: 0.85rem; font-weight: 600; color: #334155;">Kata Sandi</label>
+                @if (Route::has('password.request'))
+                <a href="{{ route('password.request') }}" style="color: #2563eb; font-size: 0.8rem; font-weight: 600; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+                    Lupa sandi?
                 </a>
-            @endif
+                @endif
+            </div>
+            <input id="password" type="password" name="password" placeholder="••••••••" required autocomplete="current-password"
+                style="width: 100%; box-sizing: border-box; padding: 0.85rem 1rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; font-size: 0.9rem; color: #0f172a; background-color: #ffffff; outline: none; transition: all 0.2s;"
+                onfocus="this.style.borderColor='#2563eb'; this.style.boxShadow='0 0 0 4px rgba(37, 99, 235, 0.1)';"
+                onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none';" />
+            <x-input-error :messages="$errors->get('password')" class="mt-1" />
         </div>
 
-        <x-primary-button class="w-full">
-            Masuk
-        </x-primary-button>
+        <div style="display: flex; align-items: center; font-size: 0.85rem; margin-top: 0.05rem;">
+            <label for="remember_me" style="display: inline-flex; align-items: center; cursor: pointer; color: #64748b; font-weight: 500;">
+                <input id="remember_me" type="checkbox" name="remember" style="margin-right: 0.5rem; border-radius: 0.25rem; border: 1px solid #cbd5e1; cursor: pointer; width: 15px; height: 15px;">
+                Ingat perangkat ini
+            </label>
+        </div>
 
-        <p class="text-center text-sm text-slate-500">
-            Demo admin: <span class="font-bold text-slate-700">admin@smartrental.local</span> / <span class="font-bold text-slate-700">password</span>
-        </p>
+        <div style="padding-top: 0.25rem;">
+            <button type="submit" style="width: 100%; padding: 0.85rem; background-color: #2563eb; color: #ffffff; border: none; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background-color 0.2s; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);"
+                onmouseover="this.style.backgroundColor='#1d4ed8';"
+                onmouseout="this.style.backgroundColor='#2563eb';">
+                Masuk ke Dasbor
+            </button>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: #94a3b8; font-size: 0.75rem; font-weight: 500;">
+            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+            <span>Secured End-to-End SSL Encryption</span>
+        </div>
     </form>
 </x-guest-layout>
