@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        color-scheme: light;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background: #f8fafc;
+    }
+}
+
+@layer components {
+    .sr-card {
+        @apply rounded-2xl border border-slate-200 bg-white shadow-sm;
+    }
+
+    .sr-button-primary {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white shadow-sm shadow-blue-200 transition hover:bg-blue-700;
+    }
+
+    .sr-button-secondary {
+        @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700;
+    }
+
+    .sr-input {
+        @apply rounded-xl border-slate-200 text-sm shadow-sm placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500;
+    }
+
+    .sr-table th {
+        @apply whitespace-nowrap px-4 py-3 text-left text-xs font-bold uppercase tracking-normal text-slate-500;
+    }
+
+    .sr-table td {
+        @apply whitespace-nowrap border-t border-slate-100 px-4 py-3 text-sm text-slate-700;
+    }
+
+    .event-pickup {
+        @apply border-emerald-200 bg-emerald-50 text-emerald-700;
+    }
+
+    .event-return {
+        @apply border-amber-200 bg-amber-50 text-amber-700;
+    }
+
+    .event-maintenance {
+        @apply border-rose-200 bg-rose-50 text-rose-700;
+    }
+
+    .fc {
+        @apply text-sm text-slate-700;
+    }
+
+    .fc .fc-toolbar-title {
+        @apply text-xl font-bold text-slate-950;
+    }
+
+    .fc .fc-button {
+        @apply rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-700 shadow-sm hover:bg-blue-50 hover:text-blue-700;
+    }
+
+    .fc .fc-button-primary:not(:disabled).fc-button-active,
+    .fc .fc-button-primary:not(:disabled):active {
+        @apply border-blue-600 bg-blue-600 text-white;
+    }
+
+    .fc .fc-daygrid-day-number {
+        @apply p-2 font-bold text-slate-700;
+    }
+
+    .fc .fc-col-header-cell-cushion {
+        @apply py-3 text-xs font-bold uppercase text-slate-500;
+    }
+
+    .fc .fc-event {
+        @apply rounded-lg border px-2 py-1 text-xs font-bold;
+    }
+}

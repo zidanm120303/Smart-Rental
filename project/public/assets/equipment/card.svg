@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" role="img" aria-label="Kartu Memori">
+  <rect width="320" height="220" rx="28" fill="#fff7ed"/>
+  <rect x="104" y="42" width="112" height="136" rx="18" fill="#111827"/>
+  <path d="M132 42h56l28 28v18H104V70z" fill="#f97316"/>
+  <rect x="126" y="108" width="68" height="14" rx="7" fill="#fed7aa"/>
+  <rect x="126" y="136" width="46" height="10" rx="5" fill="#fed7aa"/>
+</svg>

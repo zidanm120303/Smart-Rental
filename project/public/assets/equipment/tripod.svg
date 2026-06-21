@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" role="img" aria-label="Tripod">
+  <rect width="320" height="220" rx="28" fill="#f8fafc"/>
+  <rect x="130" y="48" width="60" height="34" rx="10" fill="#111827"/>
+  <path d="M160 82v42M160 124l-58 56M160 124l58 56M160 124v62" stroke="#334155" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="160" cy="124" r="13" fill="#2563eb"/>
+</svg>

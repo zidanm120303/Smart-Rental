@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" role="img" aria-label="Lensa">
+  <rect width="320" height="220" rx="28" fill="#f8fafc"/>
+  <rect x="62" y="72" width="196" height="78" rx="26" fill="#111827"/>
+  <rect x="82" y="62" width="42" height="98" rx="16" fill="#334155"/>
+  <rect x="142" y="68" width="28" height="86" rx="10" fill="#475569"/>
+  <rect x="204" y="62" width="44" height="98" rx="16" fill="#020617"/>
+  <path d="M118 72h12v78h-12zM176 72h10v78h-10z" fill="#ef4444"/>
+  <circle cx="230" cy="111" r="24" fill="#1d4ed8"/>
+</svg>

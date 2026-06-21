@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" role="img" aria-label="Drone">
+  <rect width="320" height="220" rx="28" fill="#f0fdfa"/>
+  <rect x="125" y="84" width="70" height="46" rx="16" fill="#0f172a"/>
+  <circle cx="160" cy="107" r="18" fill="#2563eb"/>
+  <path d="M125 94 72 62M195 94l53-32M125 120l-53 32M195 120l53 32" stroke="#334155" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="62" cy="56" r="30" fill="#ccfbf1" stroke="#14b8a6" stroke-width="8"/>
+  <circle cx="258" cy="56" r="30" fill="#ccfbf1" stroke="#14b8a6" stroke-width="8"/>
+  <circle cx="62" cy="164" r="30" fill="#ccfbf1" stroke="#14b8a6" stroke-width="8"/>
+  <circle cx="258" cy="164" r="30" fill="#ccfbf1" stroke="#14b8a6" stroke-width="8"/>
+</svg>

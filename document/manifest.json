@@ -1,0 +1,23 @@
+{
+  "project": "Smart Rental Pro",
+  "stack": [
+    "Laravel 10",
+    "PHP 8.1",
+    "MySQL FlyEnv",
+    "Tailwind CSS",
+    "Blade",
+    "ApexCharts",
+    "FullCalendar"
+  ],
+  "language": "Bahasa Indonesia untuk semua UI",
+  "no_sqlite": true,
+  "folders": [
+    "docs",
+    "sql",
+    "snippets",
+    "assets",
+    "prompts",
+    "checklists"
+  ],
+  "file_count": 63
+}
