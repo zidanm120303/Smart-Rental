@@ -8,8 +8,6 @@
             <p class="mt-1 text-sm text-slate-500">Kelola inventaris peralatan, ketersediaan, kondisi, dan siklus perawatan.</p>
         </div>
         <div class="flex flex-wrap gap-2">
-            <button class="sr-button-secondary"><i data-lucide="upload" class="h-4 w-4"></i> Impor</button>
-            <button class="sr-button-secondary"><i data-lucide="download" class="h-4 w-4"></i> Ekspor</button>
             <button type="button" class="sr-button-primary" onclick="document.getElementById('create-asset-modal').showModal()"><i data-lucide="plus" class="h-4 w-4"></i> Tambah Aset</button>
         </div>
     </div>

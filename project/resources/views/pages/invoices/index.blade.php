@@ -158,8 +158,6 @@
             <div class="sr-card p-5">
                 <h2 class="font-bold text-slate-950">Aksi Tagihan</h2>
                 <div class="mt-4 space-y-3">
-                    <button class="sr-button-secondary w-full justify-start"><i data-lucide="send" class="h-4 w-4 text-blue-600"></i> Kirim Tagihan</button>
-                    <button type="button" class="sr-button-secondary w-full justify-start" onclick="document.getElementById('payment-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' })"><i data-lucide="wallet-cards" class="h-4 w-4 text-emerald-600"></i> Catat Pembayaran</button>
                     @if ($selectedInvoice)
                         <a href="{{ route('invoices.pdf', $selectedInvoice) }}" class="sr-button-secondary w-full justify-start"><i data-lucide="download" class="h-4 w-4 text-rose-600"></i> Unduh PDF</a>
                     @endif

@@ -17,19 +17,6 @@
         </form>
 
         <div class="ml-auto flex items-center gap-2 sm:gap-3">
-            <button class="relative rounded-2xl border border-slate-200 p-2.5 text-slate-600 hover:bg-slate-50"
-                aria-label="Notifikasi">
-                <i data-lucide="bell" class="h-5 w-5"></i>
-                <span
-                    class="absolute -right-1 -top-1 rounded-full bg-rose-500 px-1.5 py-0.5 text-[10px] font-bold text-white">6</span>
-            </button>
-            <button class="relative rounded-2xl border border-slate-200 p-2.5 text-slate-600 hover:bg-slate-50"
-                aria-label="Pesan">
-                <i data-lucide="message-square" class="h-5 w-5"></i>
-                <span
-                    class="absolute -right-1 -top-1 rounded-full bg-rose-500 px-1.5 py-0.5 text-[10px] font-bold text-white">2</span>
-            </button>
-
             <div class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-2 py-2 shadow-sm md:min-w-72">
                 <div
                     class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-sm font-bold text-white">
