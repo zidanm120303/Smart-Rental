@@ -70,26 +70,4 @@
             </div>
         @endforeach
     </nav>
-
-    <div class="space-y-3 border-t border-slate-200 p-4">
-        <a href="{{ route('bookings.create') }}"
-            class="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm font-semibold text-slate-700 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700">
-            <span class="flex items-center gap-2"><i data-lucide="plus-square" class="h-4 w-4"></i> Tambah Cepat</span>
-            <i data-lucide="chevron-right" class="h-4 w-4"></i>
-        </a>
-        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-            <div class="flex gap-3">
-                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-700">
-                    <i data-lucide="shield-check" class="h-6 w-6"></i>
-                </div>
-                <div>
-                    <p class="text-sm font-bold text-slate-950">Butuh asuransi peralatan?</p>
-                    <p class="mt-1 text-xs text-slate-500">Kelola perlindungan aset rental.</p>
-                    <a href="{{ route('settings.index') }}"
-                        class="mt-2 inline-flex items-center gap-1 text-xs font-bold text-blue-700">Pelajari <i
-                            data-lucide="arrow-right" class="h-3 w-3"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
 </aside>
