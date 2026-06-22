@@ -2,9 +2,9 @@
 
 @section('content')
 @php
-    $company = $settings->get('company', collect())->keyBy('key');
-    $rental = $settings->get('rental', collect())->keyBy('key');
-    $finance = $settings->get('finance', collect())->keyBy('key');
+$company = $settings->get('company', collect())->keyBy('key');
+$rental = $settings->get('rental', collect())->keyBy('key');
+$finance = $settings->get('finance', collect())->keyBy('key');
 @endphp
 <div class="space-y-5">
     <div>
@@ -12,35 +12,9 @@
         <p class="mt-1 text-sm text-slate-500">Beranda &gt; Pengaturan &gt; Profil Perusahaan dan Aturan Bisnis</p>
     </div>
 
-    <form method="POST" action="{{ route('settings.update') }}" class="grid gap-5 xl:grid-cols-[18rem_minmax(0,1fr)]">
+    <form method="POST" action="{{ route('settings.update') }}" class="grid gap-5">
         @csrf
         @method('PUT')
-        <aside class="sr-card h-fit p-4">
-            <h2 class="px-2 text-lg font-bold text-slate-950">Pengaturan</h2>
-            <div class="mt-4 space-y-1">
-                @foreach ([
-                    ['Profil Perusahaan', 'Alamat, kontak, dan logo', 'building-2'],
-                    ['Aturan Rental', 'Harga, durasi, dan deposit', 'clipboard-list'],
-                    ['Kebijakan Pemesanan', 'Pembatalan dan biaya', 'calendar-check'],
-                    ['Pajak & Mata Uang', 'Pajak, mata uang, penagihan', 'badge-dollar-sign'],
-                    ['Metode Pembayaran', 'Gerbang bayar dan pencairan', 'credit-card'],
-                    ['Notifikasi', 'Email dan preferensi SMS', 'bell'],
-                    ['Peran Pengguna', 'Pengguna dan hak akses', 'users'],
-                    ['Kategori Aset', 'Tipe, merek, atribut', 'tags'],
-                    ['Lokasi', 'Gudang dan titik pengambilan', 'map-pin'],
-                    ['Integrasi', 'Aplikasi pihak ketiga', 'blocks'],
-                    ['Tampilan Aplikasi', 'Identitas visual dan tampilan', 'palette'],
-                ] as $index => $item)
-                    <button type="button" class="flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left {{ $index === 0 ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50' }}">
-                        <i data-lucide="{{ $item[2] }}" class="h-5 w-5"></i>
-                        <span>
-                            <span class="block text-sm font-bold">{{ $item[0] }}</span>
-                            <span class="text-xs">{{ $item[1] }}</span>
-                        </span>
-                    </button>
-                @endforeach
-            </div>
-        </aside>
 
         <section class="sr-card p-5">
             <div class="flex flex-col gap-4 border-b border-slate-100 pb-5 md:flex-row md:items-center md:justify-between">
@@ -69,11 +43,18 @@
                             </label>
                             <label>
                                 <span class="text-sm font-bold text-slate-700">Industri</span>
-                                <select class="sr-input mt-2 w-full"><option>Rental Peralatan</option><option>Event Production</option></select>
+                                <select class="sr-input mt-2 w-full">
+                                    <option>Rental Peralatan</option>
+                                    <option>Event Production</option>
+                                </select>
                             </label>
                             <label>
                                 <span class="text-sm font-bold text-slate-700">Ukuran Perusahaan</span>
-                                <select class="sr-input mt-2 w-full"><option>1-20 staf</option><option>21-50 staf</option><option>51-200 staf</option></select>
+                                <select class="sr-input mt-2 w-full">
+                                    <option>1-20 staf</option>
+                                    <option>21-50 staf</option>
+                                    <option>51-200 staf</option>
+                                </select>
                             </label>
                         </div>
                         <div class="mt-5 grid gap-4 md:grid-cols-[5rem_minmax(0,1fr)]">
@@ -130,10 +111,10 @@
                         <h3 class="font-bold text-slate-950">Peran & Kategori</h3>
                         <div class="mt-4 space-y-3">
                             @foreach ($roles as $role)
-                                <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
-                                    <span class="text-sm font-bold text-slate-700">{{ $role->display_name }}</span>
-                                    <span class="text-sm font-bold text-slate-950">{{ $role->users_count }} pengguna</span>
-                                </div>
+                            <div class="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
+                                <span class="text-sm font-bold text-slate-700">{{ $role->display_name }}</span>
+                                <span class="text-sm font-bold text-slate-950">{{ $role->users_count }} pengguna</span>
+                            </div>
                             @endforeach
                         </div>
                     </section>
@@ -150,10 +131,10 @@
                 </div>
                 <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
                     @foreach (['Aturan Rental', 'Kebijakan Pemesanan', 'Pajak & Mata Uang', 'Metode Pembayaran', 'Notifikasi'] as $section)
-                        <div class="flex items-center justify-between rounded-2xl border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700">
-                            <span>{{ $section }}</span>
-                            <i data-lucide="chevron-right" class="h-4 w-4"></i>
-                        </div>
+                    <div class="flex items-center justify-between rounded-2xl border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700">
+                        <span>{{ $section }}</span>
+                        <i data-lucide="chevron-right" class="h-4 w-4"></i>
+                    </div>
                     @endforeach
                 </div>
             </section>
