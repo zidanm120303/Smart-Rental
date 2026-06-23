@@ -19,13 +19,8 @@
         </div>
 
         <div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+            <div style="display: flex; align-items: center; margin-bottom: 0.4rem;">
                 <label for="password" style="font-size: 0.85rem; font-weight: 600; color: #334155;">Kata Sandi</label>
-                @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}" style="color: #2563eb; font-size: 0.8rem; font-weight: 600; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
-                    Lupa sandi?
-                </a>
-                @endif
             </div>
             <input id="password" type="password" name="password" placeholder="••••••••" required autocomplete="current-password"
                 style="width: 100%; box-sizing: border-box; padding: 0.85rem 1rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; font-size: 0.9rem; color: #0f172a; background-color: #ffffff; outline: none; transition: all 0.2s;"
@@ -33,19 +28,11 @@
                 onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none';" />
             <x-input-error :messages="$errors->get('password')" class="mt-1" />
         </div>
-
-        <div style="display: flex; align-items: center; font-size: 0.85rem; margin-top: 0.05rem;">
-            <label for="remember_me" style="display: inline-flex; align-items: center; cursor: pointer; color: #64748b; font-weight: 500;">
-                <input id="remember_me" type="checkbox" name="remember" style="margin-right: 0.5rem; border-radius: 0.25rem; border: 1px solid #cbd5e1; cursor: pointer; width: 15px; height: 15px;">
-                Ingat perangkat ini
-            </label>
-        </div>
-
         <div style="padding-top: 0.25rem;">
             <button type="submit" style="width: 100%; padding: 0.85rem; background-color: #2563eb; color: #ffffff; border: none; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background-color 0.2s; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);"
                 onmouseover="this.style.backgroundColor='#1d4ed8';"
                 onmouseout="this.style.backgroundColor='#2563eb';">
-                Masuk ke Dasbor
+                Masuk
             </button>
         </div>
 
