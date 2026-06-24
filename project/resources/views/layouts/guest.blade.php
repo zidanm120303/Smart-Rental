@@ -33,7 +33,7 @@
 
         <div style="position: absolute; bottom: 4rem; left: 5rem; z-index: 10; color: rgba(255,255,255,0.4); font-size: 0.8rem; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
             <span>&copy; 2026 Smart Rental Pro.</span>
-            <span style="color: rgba(255,255,255,0.25);">•</span>
+            <span style="color: rgba(255,255,255,0.25);">&bull;</span>
             <!-- <span>v2.4.0</span> -->
         </div>
     </div>

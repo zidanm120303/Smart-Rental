@@ -64,7 +64,7 @@
                                 <td><a href="{{ route('maintenance.index', array_merge(request()->except('page'), ['maintenance_id' => $request->id])) }}" class="font-bold text-blue-700">{{ $request->work_order_code }}</a></td>
                                 <td>
                                     <div class="flex items-center gap-3">
-                                        <img src="{{ $request->asset->image_url }}" alt="{{ $request->asset->name }}" class="h-12 w-16 rounded-xl object-cover ring-1 ring-slate-200">
+                                        <img src="{{ $request->asset->display_image_url }}" alt="{{ $request->asset->name }}" class="h-12 w-16 rounded-xl object-cover ring-1 ring-slate-200">
                                         <div class="min-w-0">
                                             <p class="max-w-[18rem] truncate font-semibold text-slate-950">{{ $request->asset->name }}</p>
                                             <p class="text-xs text-slate-500">{{ $request->asset->asset_code }}</p>
@@ -109,7 +109,7 @@
                     <div>
                         <p class="text-sm font-bold text-blue-700">{{ $selectedRequest->work_order_code }}</p>
                         <div class="mt-3 flex items-center gap-3">
-                            <img src="{{ $selectedRequest->asset->image_url }}" alt="{{ $selectedRequest->asset->name }}" class="h-20 w-24 rounded-2xl object-cover ring-1 ring-slate-200">
+                            <img src="{{ $selectedRequest->asset->display_image_url }}" alt="{{ $selectedRequest->asset->name }}" class="h-20 w-24 rounded-2xl object-cover ring-1 ring-slate-200">
                             <div class="min-w-0">
                                 <h2 class="font-bold text-slate-950">{{ $selectedRequest->asset->name }}</h2>
                                 <p class="text-sm text-slate-500">{{ $selectedRequest->asset->asset_code }}</p>

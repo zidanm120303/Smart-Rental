@@ -15,19 +15,19 @@ class MaintenanceController extends Controller
     {
         abort_unless(auth()->user()->hasPermission('maintenance.view'), 403, 'Anda tidak memiliki akses ke Perawatan.');
 
-        $requests = MaintenanceRequest::with(['asset.category', 'technician'])
+        $requests = MaintenanceRequest::with(['asset.category', 'asset.primaryMedia', 'technician'])
             ->when($request->status, fn ($query, $status) => $query->where('status', $status))
             ->latest()
             ->paginate(8)
             ->withQueryString();
 
-        $selectedRequest = MaintenanceRequest::with(['asset.category', 'asset.location', 'technician', 'checklists'])
-            ->find($request->get('maintenance_id')) ?? MaintenanceRequest::with(['asset.category', 'asset.location', 'technician', 'checklists'])->latest()->first();
+        $selectedRequest = MaintenanceRequest::with(['asset.category', 'asset.location', 'asset.primaryMedia', 'technician', 'checklists'])
+            ->find($request->get('maintenance_id')) ?? MaintenanceRequest::with(['asset.category', 'asset.location', 'asset.primaryMedia', 'technician', 'checklists'])->latest()->first();
 
         return view('pages.maintenance.index', [
             'requests' => $requests,
             'selectedRequest' => $selectedRequest,
-            'assets' => Asset::with(['category', 'location'])->where('is_active', true)->orderBy('name')->get(),
+            'assets' => Asset::with(['category', 'location', 'primaryMedia'])->where('is_active', true)->orderBy('name')->get(),
             'technicians' => User::whereHas('roles', fn ($query) => $query->whereIn('name', ['teknisi', 'staff_gudang', 'admin_operasional']))->orderBy('name')->get(),
         ]);
     }

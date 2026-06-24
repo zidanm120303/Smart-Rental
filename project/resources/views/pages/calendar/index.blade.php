@@ -10,10 +10,10 @@
                 <p class="mt-1 text-sm text-slate-500">Pantau pengambilan, pengembalian, perawatan, transportasi, dan staf.</p>
             </div>
         </div>
-        <x-stat-card title="Pemesanan" :value="$bookings->count()" trend="Periode aktif" icon="calendar-check" tone="blue" />
-        <x-stat-card title="Utilisasi" value="68%" trend="Naik dari bulan lalu" icon="gauge" tone="emerald" />
-        <x-stat-card title="Pendapatan" value="Rp 128 jt" trend="Estimasi bulan ini" icon="badge-dollar-sign" tone="amber" />
-        <x-stat-card title="Perawatan" :value="$maintenance->count()" trend="Perintah kerja aktif" icon="wrench" tone="rose" />
+        <x-stat-card title="Pemesanan" :value="number_format($calendarStats['bookings'], 0, ',', '.')" trend="Bulan berjalan" icon="calendar-check" tone="blue" />
+        <x-stat-card title="Utilisasi" :value="$calendarStats['utilization'] . '%'" trend="Aset disewa/dipesan" icon="gauge" tone="emerald" />
+        <x-stat-card title="Pendapatan" :value="'Rp ' . number_format($calendarStats['revenue'], 0, ',', '.')" trend="Pembayaran bulan ini" icon="badge-dollar-sign" tone="amber" />
+        <x-stat-card title="Perawatan" :value="number_format($calendarStats['maintenance'], 0, ',', '.')" trend="Perintah kerja aktif" icon="wrench" tone="rose" />
     </div>
 
     <div class="grid gap-5 xl:grid-cols-[14rem_minmax(0,1fr)_18rem] 2xl:grid-cols-[16rem_minmax(0,1fr)_18rem]">
@@ -69,39 +69,30 @@
                     <a href="{{ route('bookings.index') }}" class="text-xs font-bold text-blue-700">Lihat semua</a>
                 </div>
                 <div class="mt-4 space-y-3">
-                    @foreach ($bookings->take(3) as $booking)
+                    @forelse ($upcomingAgenda as $agenda)
                         <div class="rounded-2xl border border-slate-200 p-3">
                             <div class="flex items-start gap-3">
-                                <span class="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+                                <span class="mt-1 h-2.5 w-2.5 rounded-full {{ $agenda['color'] === 'rose' ? 'bg-rose-500' : 'bg-emerald-500' }}"></span>
                                 <div>
-                                    <p class="text-sm font-bold text-slate-950">Pengambilan {{ $booking->customer->name }}</p>
-                                    <p class="mt-1 text-xs text-slate-500">{{ $booking->pickup_at->translatedFormat('d M Y H:i') }}</p>
+                                    <p class="text-sm font-bold text-slate-950">{{ $agenda['title'] }}</p>
+                                    <p class="mt-1 text-xs text-slate-500">{{ $agenda['subtitle'] }} &middot; {{ $agenda['starts_at']->translatedFormat('d M Y H:i') }}</p>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-                    @foreach ($maintenance->take(2) as $request)
-                        <div class="rounded-2xl border border-slate-200 p-3">
-                            <div class="flex items-start gap-3">
-                                <span class="mt-1 h-2.5 w-2.5 rounded-full bg-rose-500"></span>
-                                <div>
-                                    <p class="text-sm font-bold text-slate-950">{{ $request->issue_title }}</p>
-                                    <p class="mt-1 text-xs text-slate-500">{{ $request->asset->name ?? '-' }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                    @empty
+                        <p class="rounded-2xl border border-dashed border-slate-200 p-4 text-sm text-slate-500">Belum ada agenda mendatang.</p>
+                    @endforelse
                 </div>
             </div>
 
             <div class="sr-card p-5">
                 <h2 class="font-bold text-slate-950">Ringkasan Utilisasi</h2>
                 <div class="mt-4 flex items-center gap-4">
-                    <div class="flex h-24 w-24 items-center justify-center rounded-full border-[10px] border-blue-600 text-xl font-bold text-slate-950">68%</div>
+                    <div class="flex h-24 w-24 items-center justify-center rounded-full border-[10px] border-blue-600 text-xl font-bold text-slate-950">{{ $calendarStats['utilization'] }}%</div>
                     <div class="space-y-2 text-sm">
-                        <p class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-blue-600"></span> Terpakai 842 aset</p>
-                        <p class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-slate-300"></span> Tersedia 352 aset</p>
-                        <p class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-rose-500"></span> Perawatan 44 aset</p>
+                        <p class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-blue-600"></span> Terpakai {{ number_format($calendarStats['used_assets'], 0, ',', '.') }} aset</p>
+                        <p class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-slate-300"></span> Tersedia {{ number_format($calendarStats['available_assets'], 0, ',', '.') }} aset</p>
+                        <p class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-rose-500"></span> Perawatan {{ number_format($calendarStats['maintenance_assets'], 0, ',', '.') }} aset</p>
                     </div>
                 </div>
             </div>
@@ -109,18 +100,20 @@
             <div class="sr-card p-5">
                 <h2 class="font-bold text-slate-950">Staf Bertugas</h2>
                 <div class="mt-4 space-y-3">
-                    @foreach (['Admin Operasional' => 'Bertugas', 'Teknisi' => 'Bertugas', 'Staf Gudang' => 'Bertugas'] as $name => $status)
+                    @forelse ($staffOnDuty as $staff)
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 text-xs font-bold text-white">{{ substr($name, 0, 1) }}</div>
+                                <div class="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 text-xs font-bold text-white">{{ strtoupper(substr($staff->name, 0, 1)) }}</div>
                                 <div>
-                                    <p class="text-sm font-bold text-slate-950">{{ $name }}</p>
-                                    <p class="text-xs text-slate-500">Tim operasional</p>
+                                    <p class="text-sm font-bold text-slate-950">{{ $staff->name }}</p>
+                                    <p class="text-xs text-slate-500">{{ $staff->role_label }}</p>
                                 </div>
                             </div>
                             <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">Bertugas</span>
                         </div>
-                    @endforeach
+                    @empty
+                        <p class="rounded-2xl border border-dashed border-slate-200 p-4 text-sm text-slate-500">Belum ada staf aktif.</p>
+                    @endforelse
                 </div>
             </div>
         </aside>

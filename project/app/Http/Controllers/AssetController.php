@@ -19,7 +19,7 @@ class AssetController extends Controller
         $viewMode = $request->get('view', 'table');
 
         $assets = Asset::query()
-            ->with(['category', 'brand', 'location', 'specifications'])
+            ->with(['category', 'brand', 'location', 'specifications', 'primaryMedia'])
             ->when($request->search, function ($query, $search) {
                 $query->where(function ($inner) use ($search) {
                     $inner->where('name', 'like', "%{$search}%")
@@ -35,11 +35,11 @@ class AssetController extends Controller
             ->paginate($viewMode === 'grid' ? 12 : 10)
             ->withQueryString();
 
-        $selectedAsset = Asset::with(['category', 'brand', 'location', 'specifications', 'bookingItems.booking.customer', 'maintenanceRequests.technician'])
+        $selectedAsset = Asset::with(['category', 'brand', 'location', 'specifications', 'primaryMedia', 'bookingItems.booking.customer', 'maintenanceRequests.technician'])
             ->find($request->get('asset_id'));
 
         if (!$selectedAsset && $assets->getCollection()->isNotEmpty()) {
-            $selectedAsset = $assets->getCollection()->first()->load(['category', 'brand', 'location', 'specifications', 'bookingItems.booking.customer', 'maintenanceRequests.technician']);
+            $selectedAsset = $assets->getCollection()->first()->load(['category', 'brand', 'location', 'specifications', 'primaryMedia', 'bookingItems.booking.customer', 'maintenanceRequests.technician']);
         }
 
         return view('pages.assets.index', [

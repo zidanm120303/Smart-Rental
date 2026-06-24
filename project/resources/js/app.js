@@ -30,8 +30,9 @@ function initDashboardCharts() {
     if (revenueEl) {
         const labels = JSON.parse(revenueEl.dataset.labels || '[]');
         const values = JSON.parse(revenueEl.dataset.values || '[]');
+        const height = Number(revenueEl.dataset.height || 235);
         new ApexCharts(revenueEl, {
-            chart: { type: 'area', height: 390, toolbar: { show: false }, fontFamily: 'Inter, ui-sans-serif, system-ui' },
+            chart: { type: 'area', height, toolbar: { show: false }, fontFamily: 'Inter, ui-sans-serif, system-ui' },
             colors: ['#2563EB'],
             series: [{ name: 'Pendapatan', data: values }],
             xaxis: { categories: labels, labels: { style: { colors: '#64748B' } } },
@@ -51,12 +52,13 @@ function initDashboardCharts() {
 
     const statusEl = document.querySelector('[data-chart="booking-status"]');
     if (statusEl) {
+        const height = Number(statusEl.dataset.height || 215);
         new ApexCharts(statusEl, {
-            chart: { type: 'donut', height: 330, fontFamily: 'Inter, ui-sans-serif, system-ui' },
+            chart: { type: 'donut', height, fontFamily: 'Inter, ui-sans-serif, system-ui' },
             labels: JSON.parse(statusEl.dataset.labels || '[]'),
             series: JSON.parse(statusEl.dataset.values || '[]'),
             colors: ['#2563EB', '#22C55E', '#F59E0B', '#8B5CF6', '#EF4444', '#64748B'],
-            legend: { position: 'right', fontSize: '12px', labels: { colors: '#475569' } },
+            legend: { show: false },
             dataLabels: { enabled: false },
             plotOptions: { pie: { donut: { size: '68%', labels: { show: true, total: { show: true, label: 'Total' } } } } },
         }).render();
@@ -64,8 +66,9 @@ function initDashboardCharts() {
 
     const utilizationEl = document.querySelector('[data-chart="utilization"]');
     if (utilizationEl) {
+        const height = Number(utilizationEl.dataset.height || 175);
         new ApexCharts(utilizationEl, {
-            chart: { type: 'radialBar', height: 270, sparkline: { enabled: true } },
+            chart: { type: 'radialBar', height, sparkline: { enabled: true } },
             series: [Number(utilizationEl.dataset.value || 0)],
             colors: ['#2563EB'],
             plotOptions: {

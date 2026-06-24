@@ -10,7 +10,7 @@ class LocationController extends Controller
 {
     public function index()
     {
-        abort_unless(auth()->user()->hasPermission('assets.view'), 403, 'Anda tidak memiliki akses ke Lokasi.');
+        abort_unless(auth()->user()->hasPermission('assets.create'), 403, 'Anda tidak memiliki akses ke Lokasi.');
 
         return view('pages.locations.index', [
             'locations' => Location::withCount('assets')->orderBy('name')->get(),

@@ -40,9 +40,9 @@ class BookingService
                 throw ValidationException::withMessages(['asset_ids' => 'Beberapa aset tidak ditemukan.']);
             }
 
-            $notRentable = $assets->filter(fn ($asset) => !in_array($asset->availability_status, ['available', 'reserved'], true));
+            $notRentable = $assets->filter(fn ($asset) => $asset->availability_status !== 'available' || !$asset->is_active);
             if ($notRentable->isNotEmpty()) {
-                throw ValidationException::withMessages(['asset_ids' => 'Beberapa aset sedang disewa atau maintenance.']);
+                throw ValidationException::withMessages(['asset_ids' => 'Hanya aset berstatus tersedia yang dapat dipilih.']);
             }
 
             $availability = $this->checkAvailability($assetIds, $payload['pickup_at'], $payload['return_at']);

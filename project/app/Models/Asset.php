@@ -65,6 +65,20 @@ class Asset extends Model
         return $this->hasMany(AssetMedia::class);
     }
 
+    public function primaryMedia()
+    {
+        return $this->hasOne(AssetMedia::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function getDisplayImageUrlAttribute(): ?string
+    {
+        if ($this->relationLoaded('primaryMedia')) {
+            return $this->primaryMedia?->file_path ?? $this->image_url;
+        }
+
+        return $this->primaryMedia()->value('file_path') ?? $this->image_url;
+    }
+
     public function specifications()
     {
         return $this->hasMany(AssetSpecification::class)->orderBy('sort_order');

@@ -12,7 +12,7 @@ class StaffController extends Controller
 {
     public function index()
     {
-        abort_unless(auth()->user()->hasPermission('users.manage') || auth()->user()->hasPermission('dashboard.view'), 403, 'Anda tidak memiliki akses ke Staff.');
+        abort_unless(auth()->user()->hasPermission('users.manage'), 403, 'Anda tidak memiliki akses ke Staff.');
 
         return view('pages.staff.index', [
             'staff' => User::with('roles')->orderBy('name')->get(),

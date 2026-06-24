@@ -1,18 +1,20 @@
 @php
+    $user = auth()->user();
     $menus = [
-        ['label' => 'Dasbor', 'route' => 'dashboard', 'icon' => 'layout-dashboard'],
-        ['label' => 'Pemesanan', 'route' => 'bookings.index', 'icon' => 'calendar-check'],
-        ['label' => 'Manajemen Aset', 'route' => 'assets.index', 'icon' => 'camera'],
-        ['label' => 'Pelanggan', 'route' => 'customers.index', 'icon' => 'users'],
-        ['label' => 'Kalender Operasional', 'route' => 'calendar.index', 'icon' => 'calendar-days'],
-        ['label' => 'Tagihan', 'route' => 'invoices.index', 'icon' => 'file-text'],
-        ['label' => 'Perawatan', 'route' => 'maintenance.index', 'icon' => 'wrench'],
-        ['label' => 'Inventori', 'route' => 'inventory.index', 'icon' => 'package-check'],
-        ['label' => 'Laporan', 'route' => 'reports.index', 'icon' => 'bar-chart-3'],
-        ['label' => 'Staf', 'route' => 'staff.index', 'icon' => 'id-card'],
-        ['label' => 'Lokasi', 'route' => 'locations.index', 'icon' => 'map-pin'],
-        ['label' => 'Pengaturan', 'route' => 'settings.index', 'icon' => 'settings'],
+        ['label' => 'Dasbor', 'route' => 'dashboard', 'icon' => 'layout-dashboard', 'permission' => 'dashboard.view'],
+        ['label' => 'Pemesanan', 'route' => 'bookings.index', 'icon' => 'calendar-check', 'permission' => 'bookings.view'],
+        ['label' => 'Manajemen Aset', 'route' => 'assets.index', 'icon' => 'camera', 'permission' => 'assets.view'],
+        ['label' => 'Pelanggan', 'route' => 'customers.index', 'icon' => 'users', 'permission' => 'customers.view'],
+        ['label' => 'Kalender Operasional', 'route' => 'calendar.index', 'icon' => 'calendar-days', 'permission' => 'calendar.view'],
+        ['label' => 'Tagihan', 'route' => 'invoices.index', 'icon' => 'file-text', 'permission' => 'invoices.view'],
+        ['label' => 'Perawatan', 'route' => 'maintenance.index', 'icon' => 'wrench', 'permission' => 'maintenance.view'],
+        ['label' => 'Inventori', 'route' => 'inventory.index', 'icon' => 'package-check', 'permission' => 'inventory.view'],
+        ['label' => 'Laporan', 'route' => 'reports.index', 'icon' => 'bar-chart-3', 'permission' => 'reports.view'],
+        ['label' => 'Staf', 'route' => 'staff.index', 'icon' => 'id-card', 'permission' => 'users.manage'],
+        ['label' => 'Lokasi', 'route' => 'locations.index', 'icon' => 'map-pin', 'permission' => 'assets.create'],
+        ['label' => 'Pengaturan', 'route' => 'settings.index', 'icon' => 'settings', 'permission' => 'settings.manage'],
     ];
+    $visibleMenus = collect($menus)->filter(fn ($menu) => $user?->hasPermission($menu['permission']) ?? false);
 @endphp
 
 <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 z-40 bg-slate-950/40 lg:hidden"
@@ -23,8 +25,8 @@
     :class="{ 'translate-x-0': sidebarOpen }">
     <div class="flex h-20 items-center gap-3 border-b border-slate-200 px-5">
         <div
-            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-sm shadow-blue-200">
-            <i data-lucide="camera" class="h-6 w-6"></i>
+            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-200 ring-1 ring-blue-500/20">
+            <x-application-logo class="h-7 w-7 text-white" />
         </div>
         <div>
             <p class="text-lg font-bold leading-tight text-slate-950">Smart Rental Pro</p>
@@ -37,7 +39,7 @@
     </div>
 
     <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-        @foreach ($menus as $menu)
+        @foreach ($visibleMenus as $menu)
             @php
                 $active =
                     request()->routeIs($menu['route']) ||

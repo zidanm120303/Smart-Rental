@@ -32,10 +32,21 @@ class BookingController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $currentAssetIds = $bookings->getCollection()
+            ->flatMap(fn ($booking) => $booking->items->pluck('asset_id'))
+            ->unique()
+            ->values();
+
         return view('pages.bookings.index', [
             'bookings' => $bookings,
             'customers' => Customer::where('is_active', true)->orderBy('name')->get(),
-            'assets' => Asset::with(['category', 'location'])->where('is_active', true)->orderBy('name')->get(),
+            'assets' => Asset::with(['category', 'location', 'primaryMedia'])
+                ->where(function ($query) use ($currentAssetIds) {
+                    $query->available()
+                        ->when($currentAssetIds->isNotEmpty(), fn ($inner) => $inner->orWhereIn('id', $currentAssetIds));
+                })
+                ->orderBy('name')
+                ->get(),
         ]);
     }
 
@@ -45,7 +56,7 @@ class BookingController extends Controller
 
         return view('pages.bookings.create', [
             'customers' => Customer::where('is_active', true)->orderBy('name')->get(),
-            'assets' => Asset::with(['category', 'location'])->where('is_active', true)->orderBy('name')->get(),
+            'assets' => Asset::with(['category', 'location', 'primaryMedia'])->available()->orderBy('name')->get(),
             'bookingCode' => 'BK-' . now()->format('Ymd') . '-AUTO',
         ]);
     }
@@ -103,6 +114,12 @@ class BookingController extends Controller
 
     public function checkAvailability(Request $request)
     {
+        abort_unless(
+            auth()->user()->hasPermission('bookings.create') || auth()->user()->hasPermission('bookings.update'),
+            403,
+            'Anda tidak memiliki akses mengecek ketersediaan.'
+        );
+
         $validated = $request->validate([
             'asset_ids' => ['required', 'array', 'min:1'],
             'asset_ids.*' => ['integer', 'exists:assets,id'],
@@ -112,6 +129,18 @@ class BookingController extends Controller
             'asset_ids.required' => 'Pilih minimal satu aset.',
             'return_at.after' => 'Jadwal kembali harus setelah jadwal pickup.',
         ]);
+
+        $unavailableAssets = Asset::whereIn('id', $validated['asset_ids'])
+            ->where(fn ($query) => $query->where('availability_status', '!=', 'available')->orWhere('is_active', false))
+            ->pluck('name');
+
+        if ($unavailableAssets->isNotEmpty()) {
+            return response()->json([
+                'available' => false,
+                'message' => 'Hanya aset berstatus tersedia yang dapat dipilih.',
+                'conflicts' => $unavailableAssets->map(fn ($name) => ['asset_name' => $name])->values(),
+            ], 422);
+        }
 
         $result = $this->bookingService->checkAvailability($validated['asset_ids'], $validated['pickup_at'], $validated['return_at']);
 

@@ -12,7 +12,7 @@ class SettingController extends Controller
 {
     public function index()
     {
-        abort_unless(auth()->user()->hasPermission('settings.manage') || auth()->user()->hasPermission('dashboard.view'), 403, 'Anda tidak memiliki akses ke Settings.');
+        abort_unless(auth()->user()->hasPermission('settings.manage'), 403, 'Anda tidak memiliki akses ke Settings.');
 
         return view('pages.settings.index', [
             'settings' => Setting::all()->groupBy('group'),

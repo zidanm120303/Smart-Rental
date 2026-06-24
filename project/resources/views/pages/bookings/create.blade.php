@@ -75,7 +75,7 @@
                     @foreach ($assets as $asset)
                         <label class="flex cursor-pointer gap-3 rounded-2xl border border-slate-200 p-3 transition hover:border-blue-300 hover:bg-blue-50/40">
                             <input type="checkbox" name="asset_ids[]" value="{{ $asset->id }}" data-asset-checkbox data-rate="{{ $asset->daily_rate }}" class="mt-1 rounded border-slate-300 text-blue-600 focus:ring-blue-500" @checked(in_array($asset->id, old('asset_ids', [])))>
-                            <img src="{{ $asset->image_url }}" alt="{{ $asset->name }}" class="h-16 w-20 rounded-xl object-contain ring-1 ring-slate-200">
+                            <img src="{{ $asset->display_image_url }}" alt="{{ $asset->name }}" class="h-16 w-20 rounded-xl object-contain ring-1 ring-slate-200">
                             <span class="min-w-0 flex-1">
                                 <span class="block truncate text-sm font-bold text-slate-950">{{ $asset->name }}</span>
                                 <span class="mt-1 block text-xs text-slate-500">{{ $asset->category->name ?? '-' }} &middot; {{ $asset->location->name ?? '-' }}</span>

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Asset;
 use App\Models\AssetBrand;
 use App\Models\AssetCategory;
+use App\Models\AssetMedia;
 use App\Models\Booking;
 use App\Models\Customer;
 use App\Models\InventoryItem;
@@ -78,10 +79,44 @@ class SmartRentalSeeder extends Seeder
     {
         $roles = [
             'pemilik' => ['Pemilik', $permissions],
-            'admin_operasional' => ['Admin Operasional', $permissions],
-            'staff_gudang' => ['Staf Gudang', ['dashboard.view', 'assets.view', 'assets.update', 'bookings.view', 'bookings.update', 'calendar.view', 'inventory.view', 'inventory.manage']],
-            'teknisi' => ['Teknisi', ['dashboard.view', 'assets.view', 'calendar.view', 'maintenance.view', 'maintenance.manage', 'inventory.view']],
-            'finance' => ['Finance', ['dashboard.view', 'customers.view', 'calendar.view', 'invoices.view', 'invoices.manage', 'payments.manage', 'reports.view']],
+            'admin_operasional' => ['Admin Operasional', [
+                'dashboard.view',
+                'assets.view',
+                'assets.create',
+                'assets.update',
+                'assets.delete',
+                'bookings.view',
+                'bookings.create',
+                'bookings.update',
+                'bookings.cancel',
+                'bookings.approve',
+                'customers.view',
+                'customers.manage',
+                'calendar.view',
+                'invoices.view',
+                'invoices.manage',
+            ]],
+            'staff_gudang' => ['Staf Gudang', [
+                'dashboard.view',
+                'assets.view',
+                'assets.update',
+                'bookings.view',
+                'bookings.update',
+                'calendar.view',
+            ]],
+            'teknisi' => ['Teknisi', [
+                'dashboard.view',
+                'assets.view',
+                'maintenance.view',
+                'maintenance.manage',
+            ]],
+            'finance' => ['Finance', [
+                'dashboard.view',
+                'invoices.view',
+                'invoices.manage',
+                'payments.manage',
+                'reports.view',
+            ]],
         ];
 
         foreach ($roles as $name => [$displayName, $rolePermissions]) {
@@ -169,6 +204,8 @@ class SmartRentalSeeder extends Seeder
         foreach (range(1, 100) as $sequence) {
             $template = $templates[($sequence - 1) % count($templates)];
             $code = sprintf('AST-%s-%04d', $template['code'], $sequence);
+            $primaryImage = '/assets/equipment/real/' . ($template['real_image'] ?? $template['image']);
+            $flatImage = '/assets/equipment/flat/' . $template['image'];
             $status = match (true) {
                 $sequence % 25 === 0 => 'maintenance',
                 $sequence % 13 === 0 => 'rented',
@@ -184,7 +221,7 @@ class SmartRentalSeeder extends Seeder
                     'location_id' => $locationList[($sequence - 1) % $locationList->count()]->id,
                     'name' => $template['name'] . ' #' . str_pad((string) $sequence, 3, '0', STR_PAD_LEFT),
                     'serial_number' => $code . '-SN',
-                    'description' => 'Aset rental profesional dengan gambar produk berlatar flat untuk katalog operasional.',
+                    'description' => 'Aset rental profesional dengan foto produk nyata berlatar flat untuk katalog operasional.',
                     'purchase_date' => Carbon::parse('2025-01-01')->addDays($sequence * 3),
                     'purchase_price' => $template['rate'] * 45,
                     'daily_rate' => $template['rate'],
@@ -193,7 +230,7 @@ class SmartRentalSeeder extends Seeder
                     'condition_status' => ['excellent', 'good', 'good', 'fair'][($sequence - 1) % 4],
                     'availability_status' => $status,
                     'shelf_position' => sprintf('Rak %s-%02d', $template['code'], (($sequence - 1) % 20) + 1),
-                    'image_url' => '/assets/equipment/flat/' . $template['image'],
+                    'image_url' => $primaryImage,
                     'barcode' => str_replace('-', '', $code),
                     'utilization_rate' => 25 + ($sequence * 7) % 56,
                     'total_rented' => 4 + ($sequence * 5) % 72,
@@ -207,6 +244,22 @@ class SmartRentalSeeder extends Seeder
             foreach ($this->specsFor($template['category'], $template['name']) as $index => [$name, $value]) {
                 $asset->specifications()->create(['name' => $name, 'value' => $value, 'sort_order' => $index + 1]);
             }
+
+            AssetMedia::where('asset_id', $asset->id)->delete();
+            AssetMedia::create([
+                'asset_id' => $asset->id,
+                'file_path' => $primaryImage,
+                'file_type' => 'image/jpeg',
+                'caption' => $template['name'] . ' - foto produk utama',
+                'sort_order' => 1,
+            ]);
+            AssetMedia::create([
+                'asset_id' => $asset->id,
+                'file_path' => $flatImage,
+                'file_type' => 'image/png',
+                'caption' => $template['name'] . ' - ilustrasi katalog flat',
+                'sort_order' => 2,
+            ]);
 
             $assets->push($asset);
         }
@@ -515,16 +568,16 @@ class SmartRentalSeeder extends Seeder
     private function assetTemplates(): array
     {
         return [
-            ['code' => 'CAM', 'name' => 'Sony FX6 Cinema Camera', 'category' => 'Kamera', 'brand' => 'Sony', 'rate' => 1500000, 'deposit' => 2000000, 'image' => 'camera-sony-fx6.png'],
-            ['code' => 'CAM', 'name' => 'Canon EOS R5 C Cinema Kit', 'category' => 'Kamera', 'brand' => 'Canon', 'rate' => 1200000, 'deposit' => 1700000, 'image' => 'camera-canon-r5c.png'],
-            ['code' => 'LEN', 'name' => 'Canon RF 24-70mm f/2.8L II', 'category' => 'Lensa', 'brand' => 'Canon', 'rate' => 450000, 'deposit' => 750000, 'image' => 'lens-canon-24-70.png'],
-            ['code' => 'DRN', 'name' => 'DJI Mavic 3 Pro', 'category' => 'Drone', 'brand' => 'DJI', 'rate' => 900000, 'deposit' => 1500000, 'image' => 'drone-dji-mavic-3.png'],
-            ['code' => 'MIC', 'name' => 'Sennheiser AVX-ME2 Set', 'category' => 'Audio', 'brand' => 'Sennheiser', 'rate' => 250000, 'deposit' => 350000, 'image' => 'microphone-sennheiser.png'],
-            ['code' => 'SPK', 'name' => 'JBL EON712 Speaker', 'category' => 'Speaker', 'brand' => 'JBL', 'rate' => 350000, 'deposit' => 600000, 'image' => 'speaker-jbl-eon712.png'],
-            ['code' => 'LGT', 'name' => 'Aputure 300d II Light Kit', 'category' => 'Lighting', 'brand' => 'Aputure', 'rate' => 650000, 'deposit' => 900000, 'image' => 'light-aputure-300d.png'],
-            ['code' => 'TRP', 'name' => 'Manfrotto 504X Tripod', 'category' => 'Tripod', 'brand' => 'Manfrotto', 'rate' => 180000, 'deposit' => 300000, 'image' => 'tripod-manfrotto-504x.png'],
-            ['code' => 'MIX', 'name' => 'Yamaha MG10XU Mixer', 'category' => 'Mixer', 'brand' => 'Yamaha', 'rate' => 300000, 'deposit' => 500000, 'image' => 'mixer-yamaha-mg10xu.png'],
-            ['code' => 'MON', 'name' => 'Atomos Ninja V Monitor Recorder', 'category' => 'Monitor', 'brand' => 'Atomos', 'rate' => 240000, 'deposit' => 400000, 'image' => 'monitor-atomos-ninja-v.png'],
+            ['code' => 'CAM', 'name' => 'Sony FX6 Cinema Camera', 'category' => 'Kamera', 'brand' => 'Sony', 'rate' => 1500000, 'deposit' => 2000000, 'image' => 'camera-sony-fx6.png', 'real_image' => 'camera-sony-fx6.jpg'],
+            ['code' => 'CAM', 'name' => 'Canon EOS R5 C Cinema Kit', 'category' => 'Kamera', 'brand' => 'Canon', 'rate' => 1200000, 'deposit' => 1700000, 'image' => 'camera-canon-r5c.png', 'real_image' => 'camera-canon-r5c.jpg'],
+            ['code' => 'LEN', 'name' => 'Canon RF 24-70mm f/2.8L II', 'category' => 'Lensa', 'brand' => 'Canon', 'rate' => 450000, 'deposit' => 750000, 'image' => 'lens-canon-24-70.png', 'real_image' => 'lens-canon-24-70.jpg'],
+            ['code' => 'DRN', 'name' => 'DJI Mavic 3 Pro', 'category' => 'Drone', 'brand' => 'DJI', 'rate' => 900000, 'deposit' => 1500000, 'image' => 'drone-dji-mavic-3.png', 'real_image' => 'drone-mavic-3.jpg'],
+            ['code' => 'MIC', 'name' => 'Sennheiser AVX-ME2 Set', 'category' => 'Audio', 'brand' => 'Sennheiser', 'rate' => 250000, 'deposit' => 350000, 'image' => 'microphone-sennheiser.png', 'real_image' => 'microphone-sennheiser.jpg'],
+            ['code' => 'SPK', 'name' => 'JBL EON712 Speaker', 'category' => 'Speaker', 'brand' => 'JBL', 'rate' => 350000, 'deposit' => 600000, 'image' => 'speaker-jbl-eon712.png', 'real_image' => 'speaker-jbl.jpg'],
+            ['code' => 'LGT', 'name' => 'Aputure 300d II Light Kit', 'category' => 'Lighting', 'brand' => 'Aputure', 'rate' => 650000, 'deposit' => 900000, 'image' => 'light-aputure-300d.png', 'real_image' => 'light-aputure-300d.jpg'],
+            ['code' => 'TRP', 'name' => 'Manfrotto 504X Tripod', 'category' => 'Tripod', 'brand' => 'Manfrotto', 'rate' => 180000, 'deposit' => 300000, 'image' => 'tripod-manfrotto-504x.png', 'real_image' => 'tripod-manfrotto.jpg'],
+            ['code' => 'MIX', 'name' => 'Yamaha MG10XU Mixer', 'category' => 'Mixer', 'brand' => 'Yamaha', 'rate' => 300000, 'deposit' => 500000, 'image' => 'mixer-yamaha-mg10xu.png', 'real_image' => 'mixer-yamaha.jpg'],
+            ['code' => 'MON', 'name' => 'Atomos Ninja V Monitor Recorder', 'category' => 'Monitor', 'brand' => 'Atomos', 'rate' => 240000, 'deposit' => 400000, 'image' => 'monitor-atomos-ninja-v.png', 'real_image' => 'monitor-atomos.jpg'],
         ];
     }
 

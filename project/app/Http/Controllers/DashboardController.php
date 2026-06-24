@@ -26,10 +26,23 @@ class DashboardController extends Controller
             'utilisasi' => $totalAssets > 0 ? round(($utilizedAssets / $totalAssets) * 100) : 0,
         ];
 
-        $bookingTerbaru = Booking::with(['customer', 'items.asset'])->latest()->limit(6)->get();
-        $topAssets = Asset::with('category')->orderByDesc('total_rented')->limit(5)->get();
-        $maintenanceMendesak = MaintenanceRequest::with('asset')->whereIn('status', ['new', 'in_progress', 'waiting_parts'])->latest()->limit(5)->get();
-        $lowStockItems = InventoryItem::query()->whereColumn('stock', '<=', 'minimum_stock')->limit(5)->get();
+        $bookingTerbaru = Booking::with(['customer', 'items.asset'])->latest()->limit(5)->get();
+        $topAssets = Asset::with(['category', 'primaryMedia'])->orderByDesc('total_rented')->limit(5)->get();
+        $activeMaintenanceQuery = MaintenanceRequest::whereIn('status', ['new', 'in_progress', 'waiting_parts']);
+        $lowStockQuery = InventoryItem::query()->whereColumn('stock', '<=', 'minimum_stock');
+
+        $maintenanceMendesak = (clone $activeMaintenanceQuery)->with('asset')->latest()->limit(5)->get();
+        $lowStockItems = (clone $lowStockQuery)->limit(5)->get();
+
+        $dashboardCounts = [
+            'recent_bookings_total' => Booking::count(),
+            'overdue_returns' => Booking::where('status', 'overdue')->count(),
+            'active_maintenance' => (clone $activeMaintenanceQuery)->count(),
+            'low_stock' => (clone $lowStockQuery)->count(),
+            'upcoming_pickups' => Booking::whereIn('status', ['pending', 'approved', 'active'])
+                ->whereBetween('pickup_at', [now(), now()->addDays(7)])
+                ->count(),
+        ];
 
         $statusCounts = Booking::query()
             ->select('status', DB::raw('count(*) as total'))
@@ -49,6 +62,7 @@ class DashboardController extends Controller
             'topAssets',
             'maintenanceMendesak',
             'lowStockItems',
+            'dashboardCounts',
             'statusCounts',
             'revenueTrend'
         ));

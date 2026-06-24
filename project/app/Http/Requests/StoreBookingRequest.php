@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreBookingRequest extends FormRequest
 {
@@ -16,7 +17,12 @@ class StoreBookingRequest extends FormRequest
         return [
             'customer_id' => ['required', 'exists:customers,id'],
             'asset_ids' => ['required', 'array', 'min:1'],
-            'asset_ids.*' => ['integer', 'exists:assets,id'],
+            'asset_ids.*' => [
+                'integer',
+                Rule::exists('assets', 'id')->where(fn ($query) => $query
+                    ->where('availability_status', 'available')
+                    ->where('is_active', true)),
+            ],
             'pickup_at' => ['required', 'date'],
             'return_at' => ['required', 'date', 'after:pickup_at'],
             'delivery_method' => ['required', 'in:pickup,delivery'],
@@ -34,6 +40,7 @@ class StoreBookingRequest extends FormRequest
         return [
             'customer_id.required' => 'Customer wajib dipilih.',
             'asset_ids.required' => 'Pilih minimal satu aset rental.',
+            'asset_ids.*.exists' => 'Hanya aset berstatus tersedia yang dapat dipilih.',
             'pickup_at.required' => 'Jadwal pickup wajib diisi.',
             'return_at.required' => 'Jadwal kembali wajib diisi.',
             'return_at.after' => 'Jadwal kembali harus setelah jadwal pickup.',

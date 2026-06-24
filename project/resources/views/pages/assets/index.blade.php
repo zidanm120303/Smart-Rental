@@ -63,7 +63,7 @@
                                 <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500" @checked(optional($selectedAsset)->id === $asset->id)>
                                 <i data-lucide="star" class="h-5 w-5 text-slate-400"></i>
                             </div>
-                            <img src="{{ $asset->image_url }}" alt="{{ $asset->name }}" class="mx-auto mt-2 h-36 w-full rounded-2xl object-cover ring-1 ring-slate-200">
+                            <img src="{{ $asset->display_image_url }}" alt="{{ $asset->name }}" class="mx-auto mt-2 h-36 w-full rounded-2xl object-cover ring-1 ring-slate-200">
                             <div class="mt-3">
                                 <h2 class="line-clamp-1 text-base font-bold text-slate-950">{{ $asset->name }}</h2>
                                 <p class="mt-1 text-sm text-slate-500">{{ $asset->category->name ?? '-' }}</p>
@@ -106,7 +106,7 @@
                                         <td><a href="{{ route('assets.index', array_merge(request()->except('page'), ['asset_id' => $asset->id, 'view' => 'table'])) }}" class="font-bold text-blue-700">{{ $asset->asset_code }}</a></td>
                                         <td>
                                             <div class="flex items-center gap-3">
-                                                <img src="{{ $asset->image_url }}" alt="{{ $asset->name }}" class="h-12 w-16 rounded-xl object-cover ring-1 ring-slate-200">
+                                                <img src="{{ $asset->display_image_url }}" alt="{{ $asset->name }}" class="h-12 w-16 rounded-xl object-cover ring-1 ring-slate-200">
                                                 <span class="block max-w-[18rem] truncate font-semibold text-slate-950">{{ $asset->name }}</span>
                                             </div>
                                         </td>
@@ -148,7 +148,7 @@
                     <x-status-badge :status="$selectedAsset->availability_status" />
                 </div>
 
-                <img src="{{ $selectedAsset->image_url }}" alt="{{ $selectedAsset->name }}" class="mt-5 h-56 w-full rounded-2xl bg-slate-50 object-cover ring-1 ring-slate-200">
+                <img src="{{ $selectedAsset->display_image_url }}" alt="{{ $selectedAsset->name }}" class="mt-5 h-56 w-full rounded-2xl bg-slate-50 object-cover ring-1 ring-slate-200">
 
                 <div class="mt-5 grid grid-cols-3 gap-3 text-center">
                     <div class="rounded-2xl bg-slate-50 p-3">
